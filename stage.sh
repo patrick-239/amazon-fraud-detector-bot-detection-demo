@@ -36,7 +36,7 @@ echo " + Staging to $BUCKET in $S3PATH"
 
 echo " + Uploading CloudFormation Templates"
 aws s3 cp templates/ s3://${BUCKET}/${S3PATH}templates --recursive $S3PUBLIC
-echo " For CloudFormation : https://${BUCKET_DOMAIN}/${BUCKET}/${S3PATH}cloudformation-templates/template.yaml"
+echo " For CloudFormation : https://${BUCKET_DOMAIN}/${BUCKET}/${S3PATH}templates/template.yaml"
 
 echo " + Done s3://${BUCKET}/${S3PATH} "
-echo " For CloudFormation : https://${BUCKET_DOMAIN}/${BUCKET}/${S3PATH}cloudformation-templates/template.yaml"
+echo " For CloudFormation : https://${BUCKET_DOMAIN}/${BUCKET}/${S3PATH}templates/template.yaml"

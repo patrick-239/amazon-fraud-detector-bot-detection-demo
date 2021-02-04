@@ -1,0 +1,46 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >
+    This template deploys the Fraud Detector Demo reference architecture and workshop notebooks.
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups:
+      - Label:
+          default: "Fraud Detector Demo Deployment Configuration"
+        Parameters:
+          - ResourceBucket
+          - ResourceBucketRelativePath
+    ParameterLabels:
+      ResourceBucket:
+        default: "Deployment Resources Staging Bucket Name"
+      ResourceBucketRelativePath:
+        default: "Deployment Resources Staging Bucket Relative Path (optional)"
+      
+Parameters:
+  ResourceBucket:
+    Type: String
+    Description: >
+      S3 bucket name where the Fraud Detector Demo deployment resources are staged (nested CloudFormation templates, source code snapshot, 
+      notebooks, deployment Lambda code, etc).
+
+  ResourceBucketRelativePath:
+    Type: String
+    Description: >
+      Optional path in the Deployment Resources Staging bucket where the deployment resources are stored (e.g. path/path2/). 
+      Leave blank if resources are at the root of the Staging Resource Bucket. If specified, MUST end with '/'.
+
+Resources:
+  # Notebook Instance
+  Notebook:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${ResourceBucket}/${ResourceBucketRelativePath}templates/notebook.yaml
+      Parameters:
+        Uid: !Sub ${AWS::StackName}-${AWS::Region}
+        
+Outputs:
+  NotebookInstanceId:
+    Description: Notebook Instance Id.
+    Value: !GetAtt Notebook.Outputs.NotebookInstanceId

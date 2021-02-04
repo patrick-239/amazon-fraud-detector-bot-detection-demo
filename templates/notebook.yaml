@@ -5,18 +5,8 @@ Description: IAM Policies, and SageMaker Notebook to work with Fraud Detector.
 
 Parameters:
 
-  NotebookName:
+  Uid:
     Type: String
-    Default: FraudDetectorPOC
-    Description: Enter the name of the SageMaker notebook instance. Deafault is FraudDetectorPOC.
-
-  VolumeSize:
-    Type: Number
-    Default: 10
-    MinValue: 5
-    MaxValue: 16384
-    ConstraintDescription: Must be an integer between 5 (GB) and 16384 (16 TB).
-    Description: Enter the size of the EBS volume in GB.
 
 Resources:
   # SageMaker Execution Role
@@ -42,8 +32,11 @@ Resources:
   NotebookInstance:
     Type: "AWS::SageMaker::NotebookInstance"
     Properties:
-      InstanceType: "ml.t2.medium"
-      NotebookInstanceName: !Ref NotebookName
+      InstanceType: "ml.t3.medium"
+      NotebookInstanceName: !Sub ${Uid}-FraudDetectorDemo
       RoleArn: !GetAtt SageMakerIamRole.Arn
-      VolumeSizeInGB: !Ref VolumeSize
       DefaultCodeRepository: https://github.com/aws-samples/amazon-fraud-detector-bot-detection-demo.git
+
+Outputs:
+  NotebookInstanceId:
+    Value: !Ref NotebookInstance
